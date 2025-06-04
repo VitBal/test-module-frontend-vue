@@ -1,4 +1,5 @@
 import axios from "axios";
+import {actionsOnError} from "@/api/interceptors.js";
 
 const api = axios.create({
   baseURL: "/",
@@ -12,6 +13,16 @@ const api = axios.create({
 
 // if(process.env.DEBUGGING)
 //   api.defaults.withXSRFToken = true;
+api.interceptors.response.use(
+    (response) => {
+      return Promise.resolve(response);
+    },
+    (error) => {
+      actionsOnError[error.response.status]?.(error);
+
+      return Promise.reject(error);
+    }
+);
 
 function getVersion() {
   let meta = document.querySelector('meta[name="version"]');
