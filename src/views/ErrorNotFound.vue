@@ -1,0 +1,1 @@
+<template>ErrorNotFound.vue</template>
