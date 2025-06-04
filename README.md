@@ -1,29 +1,31 @@
-# test-module-frontend-vue
+## Авторизация
 
-This template should help get you started developing with Vue 3 in Vite.
+1. Чистое приложение vue.
+2. Главный файл index.html, в нем подключается main.js.
+3. В main.js импортируем vue, pinia, router и создаем экземпляр приложения app.
+   В router стандратные маршруты:
 
-## Recommended IDE Setup
+   - '/' возвращает компонент src/views/HomeView.vue
+   - '/login' возвращает компонент src/views/LoginView.vue
+   - '/home' возвращает компонент src/views/HomeView.vue
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+   Если пользователь не авторизован, то его будет выкидывать в '/login' для входа. Эта логика прописана в этом же файле.
 
-## Customize configuration
+4. Пока пользователь не авторизован, он будет всегда находиться на маршруте '/login' в компоненте src/views/LoginView.vue. После нажатия кнопки будет произведен запрос на авторизацию
 
-See [Vite Configuration Reference](https://vite.dev/config/).
+5. Запросы на авторизацию реализованы в файле src/stores/auth.js, для логирования обращаемся к методы request(user), где user = {email: 'em@em', password: '123'}. Запрос состоит из 3х подзапросов:
+   - получение csrf
+   - логирование с полученным csrf и gird_session
+   - после успешного логирования получаем данные пользователя me()
+6. Успешное логирование с необходимыми данными перенаправляет на маршрут '/home'.
 
-## Project Setup
+7. ! Захожу на сайт:
 
-```sh
-npm install
-```
+   - идет проверка - есть ли авторизированный пользователь:
+     - есть, отправляем его на /home
+     - нет, отправляем его на /login
 
-### Compile and Hot-Reload for Development
+   Находясь в /login вижу экран ввода email и pass, после ввода:
 
-```sh
-npm run dev
-```
-
-### Compile and Minify for Production
-
-```sh
-npm run build
-```
+   - проходит проверку, заходит на /home
+   - не проходит проверку, видит ошибку
