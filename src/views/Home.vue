@@ -13,11 +13,18 @@
       <p>userStore: {{ userStore }}</p>
     </div>
 
-    <div class="sm:mx-auto sm:w-full sm:max-w-sm">
+    <div class="sm:mx-auto sm:w-full sm:max-w-sm flex flex-col gap-1">
       <button
         type="submit"
-        @click="handleLogout"
-        class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+        @click="handleLogin"
+        :class="btnStyle"
+      >
+        Login
+      </button>
+      <button
+          type="submit"
+          @click="handleLogout"
+          :class="btnStyle"
       >
         Logout
       </button>
@@ -34,8 +41,17 @@ const authStore = useAuthStore();
 const userStore = useUserStore();
 const router = useRouter();
 
-const handleLogout = () => {
-  authStore.logout(true);
+const btnStyle = 'flex w-full justify-center rounded-md ' +
+    'bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white ' +
+    'shadow-xs hover:bg-indigo-500 focus-visible:outline-2 ' +
+    'focus-visible:outline-offset-2 focus-visible:outline-indigo-600'
+
+const handleLogout = async () => {
+  await authStore.logout(true);
+  await router.push("/login"); // думаю не лучшее место для этого
+};
+
+const handleLogin = () => {
   router.push("/login");
 };
 </script>
