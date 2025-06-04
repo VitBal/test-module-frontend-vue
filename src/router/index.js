@@ -26,22 +26,23 @@ const router = createRouter({
       name: "logout",
       component: () => import("@/views/Login.vue"),
     },
+    {
+      path: "/:catchAll(.*)*",
+      component: () => import("../views/ErrorNotFound.vue"),
+    },
   ],
 });
 
 router.beforeEach(async (to) => {
-  // if (to.name === "login") {
-  //   // не вызывать authStore.checkAuth(), когда мы на /login
-  //   return;
-  // }
   const authStore = useAuthStore();
   const userStore = useUserStore();
-  console.log(userStore.user);
 
   if (!userStore.user.id) {
-    console.log("нету");
-
     await authStore.checkAuth();
+  }
+
+  if (to.name === "login" && authStore.isAuthenticated) {
+    return { name: "home"}
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
