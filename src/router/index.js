@@ -17,6 +17,12 @@ const router = createRouter({
       meta: { requiresAuth: true },
     },
     {
+      path: "/about",
+      name: "about",
+      component: () => import("@/views/About.vue"),
+      meta: { requiresAuth: true },
+    },
+    {
       path: "/login",
       name: "login",
       component: () => import("@/views/Login.vue"),
@@ -42,7 +48,7 @@ router.beforeEach(async (to) => {
   }
 
   if (to.name === "login" && authStore.isAuthenticated) {
-    return { name: "home"}
+    return { name: "home" };
   }
 
   if (to.meta.requiresAuth && !authStore.isAuthenticated) {
