@@ -91,7 +91,7 @@ const handleSubmit = async () => {
       password: password.value,
     });
 
-    const redirectPath = route.query.redirect || "/home";
+    const redirectPath = route.query.redirect || "/";
     router.push(redirectPath);
   } catch (err) {
     error.value = err.message || "Login failed";
