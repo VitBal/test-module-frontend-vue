@@ -16,6 +16,7 @@
     </div>
 
     <div class="sm:mx-auto w-[60%] flex flex-wrap gap-1 pt-10">
+      <button type="submit" @click="handleAbout" :class="btnStyle"> AboutPage</button>
       <button type="submit" @click="handleLogin" :class="btnStyle"> Login</button>
       <button type="submit" @click="handleLogout" :class="btnStyle"> Logout</button>
       <button type="submit" @click="handle301" :class="btnStyle"> 301</button>
@@ -39,6 +40,11 @@ const userStore = useUserStore();
 const router = useRouter();
 
 const btnStyle = 'uppercase border-black border-1 rounded-lg py-1 px-2 font-bold hover:bg-gray-400 min-w-[10rem]'
+
+
+const handleAbout = () => {
+  router.push("/about");
+};
 
 const handleLogout = async () => {
   await authStore.logout(true)
