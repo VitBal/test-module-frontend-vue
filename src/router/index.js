@@ -8,7 +8,9 @@ const router = createRouter({
     {
       path: "/",
       name: "base",
-      component: () => import("@/views/Home.vue"), // если ты аутентифицирован, то на home, если ты  нет, то на login
+      redirect: () => {
+        return {name: 'home'}
+      }
     },
     {
       path: "/home",
