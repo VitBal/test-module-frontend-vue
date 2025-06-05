@@ -69,7 +69,8 @@
 
 <script setup>
 import { ref } from "vue";
-import { useAuthStore } from "../stores/auth";
+// import { useAuthStore } from "../stores/auth";
+import { useUserStore } from "@/stores/user";
 import { useRoute, useRouter } from "vue-router";
 
 const email = ref("");
@@ -77,7 +78,8 @@ const password = ref("");
 const error = ref(null);
 const loading = ref(false);
 
-const authStore = useAuthStore();
+// const authStore = useAuthStore();
+const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -86,7 +88,7 @@ const handleSubmit = async () => {
   error.value = null;
 
   try {
-    await authStore.request({
+    await userStore.login({
       email: email.value,
       password: password.value,
     });

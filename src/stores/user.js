@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { AuthService } from "../services/auth.service";
+import { AuthService } from "../services/auth.service"; // ?
 import { UserService } from "../services/user.service";
 import { objectHelper } from "../helpers/object.helper";
 
@@ -9,7 +9,8 @@ export const STATUS_LOADING = "loading";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    status: "",
+    isAuthenticated: false,
+    status: "", // был status auth и есть status user
     user: {},
     moduleAccess: true, // почему по умолчанию доступ есть? логично чтобы не было
   }),
@@ -35,7 +36,53 @@ export const useUserStore = defineStore("user", {
   },
 
   actions: {
+    // из auth | async request(user) из authStore
+    // !! переименовать в auth
+    async login(user) {
+      this.setRequestAuth();
+      // const userStore = useUserStore();
+      try {
+        await AuthService.getCsrf();
+        await AuthService.login(user);
+
+        this.setSuccessAuth();
+        // return await userStore.request();
+        return await this.request();
+      } catch (err) {
+        this.setErrorAuth();
+        throw err;
+      }
+    },
+
+    // из auth
+    async checkAuth() {
+      // const userStore = useUserStore();
+      try {
+        const me = await this.request(); // метод надо как то модифицировать
+        // его задача получить user
+        // а он там пачку вещей делает
+        if (me?.data?.user) {
+          this.setSuccessAuth();
+        }
+      } catch (err) {
+        this.setLogoutAuth();
+        // throw err;
+      }
+    },
+
+    // из auth
+    async logoutAuth(isServer) {
+      try {
+        if (isServer) await AuthService.logout();
+        this.setLogoutAuth();
+      } catch (err) {
+        this.setLogoutAuth();
+        // throw err;
+      }
+    },
+
     async request() {
+      // по сути me()
       try {
         this.setRequest();
         let resp = await AuthService.me();
@@ -79,6 +126,24 @@ export const useUserStore = defineStore("user", {
 
     logout() {
       this.user = {};
+    },
+
+    // store auth
+    setRequestAuth() {
+      this.status = "loading"; // может перебить статус user
+    },
+
+    setLogoutAuth() {
+      this.isAuthenticated = false;
+    },
+
+    setSuccessAuth() {
+      this.status = "success"; // может перебить статус user
+      this.isAuthenticated = true;
+    },
+
+    setErrorAuth() {
+      this.status = "error"; // может перебить статус user
     },
   },
 });

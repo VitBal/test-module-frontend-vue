@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from "vue-router";
-import { useAuthStore } from "@/stores/auth";
 import { useUserStore } from "@/stores/user";
 
 const router = createRouter({
@@ -9,8 +8,8 @@ const router = createRouter({
       path: "/",
       name: "base",
       redirect: () => {
-        return {name: 'home'}
-      }
+        return { name: "home" };
+      },
     },
     {
       path: "/home",
@@ -27,7 +26,6 @@ const router = createRouter({
       name: "login",
       component: () => import("@/views/Login.vue"),
       meta: { guest: true },
-
     },
     {
       path: "/logout",
@@ -42,18 +40,17 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to) => {
-  const authStore = useAuthStore();
   const userStore = useUserStore();
 
   if (!userStore.user.id) {
-    await authStore.checkAuth();
+    await userStore.checkAuth();
   }
 
-  if (to.name === "login" && authStore.isAuthenticated) {
+  if (to.name === "login" && userStore.isAuthenticated) {
     return { name: "home" };
   }
 
-  if (!to.meta.guest && !authStore.isAuthenticated) {
+  if (!to.meta.guest && !userStore.isAuthenticated) {
     return { name: "login" };
   }
 });
