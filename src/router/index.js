@@ -6,21 +6,28 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "base",
-      redirect: () => {
-        return { name: "home" };
-      },
+      component: () => import("@/layouts/MainLayout.vue"),
+      children: [
+        {
+          path: "",
+          name: "base",
+          redirect: () => {
+            return { name: "home" };
+          },
+        },
+        {
+          path: "home",
+          name: "home",
+          component: () => import("@/views/Home.vue"),
+        },
+        {
+          path: "about",
+          name: "about",
+          component: () => import("@/views/About.vue"),
+        },
+      ],
     },
-    {
-      path: "/home",
-      name: "home",
-      component: () => import("@/views/Home.vue"),
-    },
-    {
-      path: "/about",
-      name: "about",
-      component: () => import("@/views/About.vue"),
-    },
+
     {
       path: "/login",
       name: "login",
