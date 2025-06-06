@@ -1,12 +1,6 @@
 import { defineStore } from "pinia";
 import { AuthService } from "../services/auth.service";
-import { UserService } from "../services/user.service";
 import { objectHelper } from "../helpers/object.helper";
-
-// выпилить
-const STATUS_ERROR = "error";
-const STATUS_SUCCESS = "success";
-const STATUS_LOADING = "loading";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
@@ -38,19 +32,14 @@ export const useUserStore = defineStore("user", {
 
   actions: {
     async login(user) {
-      this.setStatus(STATUS_LOADING);
       try {
         await AuthService.getCsrf();
         await AuthService.login(user);
 
-        this.setStatus(STATUS_SUCCESS);
         this.setIsAuthenticated(true);
 
         return await this.request();
-      } catch (err) {
-        this.setStatus(STATUS_ERROR);
-        throw err;
-      }
+      } catch (err) {}
     },
 
     async logout(isServer) {
@@ -64,24 +53,19 @@ export const useUserStore = defineStore("user", {
     },
 
     async getUser() {
-      // async request() { // было наименование
-      // по сути me()
       try {
-        this.setStatus(STATUS_LOADING);
         let me = await AuthService.me();
 
-        this.setStatus(STATUS_SUCCESS);
         this.setUser(me.data.user);
         this.setIsAuthenticated(true);
 
         return me;
       } catch (err) {
-        this.setStatus(STATUS_ERROR);
         this.setIsAuthenticated(false); // !
-        // throw err; // !!
       }
     },
 
+    // !
     setModuleAccess(access = true) {
       this.moduleAccess = access;
     },
@@ -92,10 +76,6 @@ export const useUserStore = defineStore("user", {
 
     setIsAuthenticated(bool) {
       this.isAuthenticated = bool;
-    },
-
-    setStatus(STATUS) {
-      this.status = STATUS;
     },
   },
 });
