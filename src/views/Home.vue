@@ -54,7 +54,7 @@ const handleAbout = () => {
 };
 
 const handleLogout = async () => {
-  await userStore.logoutAuth(true).then(() => {
+  await userStore.logout(true).then(() => {
     router.push("/login");
   });
 };

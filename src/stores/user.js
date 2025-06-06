@@ -1,18 +1,19 @@
 import { defineStore } from "pinia";
-import { AuthService } from "../services/auth.service"; // ?
+import { AuthService } from "../services/auth.service";
 import { UserService } from "../services/user.service";
 import { objectHelper } from "../helpers/object.helper";
 
-export const STATUS_ERROR = "error";
-export const STATUS_SUCCESS = "success";
-export const STATUS_LOADING = "loading";
+// выпилить
+const STATUS_ERROR = "error";
+const STATUS_SUCCESS = "success";
+const STATUS_LOADING = "loading";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    isAuthenticated: false,
-    status: "", // был status auth и есть status user
+    isAuthenticated: false, // в геттер перенести
+    status: "",
     user: {},
-    moduleAccess: true, // почему по умолчанию доступ есть? логично чтобы не было
+    moduleAccess: true,
   }),
 
   getters: {
@@ -36,74 +37,48 @@ export const useUserStore = defineStore("user", {
   },
 
   actions: {
-    // из auth | async request(user) из authStore
-    // !! переименовать в auth
     async login(user) {
-      this.setRequestAuth();
-      // const userStore = useUserStore();
+      this.setStatus(STATUS_LOADING);
       try {
         await AuthService.getCsrf();
         await AuthService.login(user);
 
-        this.setSuccessAuth();
-        // return await userStore.request();
+        this.setStatus(STATUS_SUCCESS);
+        this.setIsAuthenticated(true);
+
         return await this.request();
       } catch (err) {
-        this.setErrorAuth();
+        this.setStatus(STATUS_ERROR);
         throw err;
       }
     },
 
-    // из auth
-    async checkAuth() {
-      // const userStore = useUserStore();
-      try {
-        const me = await this.request(); // метод надо как то модифицировать
-        // его задача получить user
-        // а он там пачку вещей делает
-        if (me?.data?.user) {
-          this.setSuccessAuth();
-        }
-      } catch (err) {
-        this.setLogoutAuth();
-        // throw err;
-      }
-    },
-
-    // из auth
-    async logoutAuth(isServer) {
+    async logout(isServer) {
       try {
         if (isServer) await AuthService.logout();
-        this.setLogoutAuth();
+        this.setIsAuthenticated(false);
       } catch (err) {
-        this.setLogoutAuth();
-        // throw err;
+        this.setIsAuthenticated(false);
+        throw err;
       }
     },
 
-    async request() {
+    async getUser() {
+      // async request() { // было наименование
       // по сути me()
       try {
-        this.setRequest();
-        let resp = await AuthService.me();
-        this.success(resp.data.user);
+        this.setStatus(STATUS_LOADING);
+        let me = await AuthService.me();
 
-        return resp;
-      } catch (e) {
-        this.error();
-        throw e;
-      }
-    },
+        this.setStatus(STATUS_SUCCESS);
+        this.setUser(me.data.user);
+        this.setIsAuthenticated(true);
 
-    async update(user) {
-      try {
-        this.setRequest();
-        let resp = await UserService.update(user.id, user);
-        this.success(resp.data.user);
-
-        return resp;
-      } catch (e) {
-        throw e;
+        return me;
+      } catch (err) {
+        this.setStatus(STATUS_ERROR);
+        this.setIsAuthenticated(false); // !
+        // throw err; // !!
       }
     },
 
@@ -111,39 +86,16 @@ export const useUserStore = defineStore("user", {
       this.moduleAccess = access;
     },
 
-    setRequest() {
-      this.status = STATUS_LOADING;
-    },
-
-    success(user) {
-      this.status = STATUS_SUCCESS;
+    setUser(user) {
       this.user = user;
     },
 
-    error() {
-      this.status = STATUS_ERROR;
+    setIsAuthenticated(bool) {
+      this.isAuthenticated = bool;
     },
 
-    logout() {
-      this.user = {};
-    },
-
-    // store auth
-    setRequestAuth() {
-      this.status = "loading"; // может перебить статус user
-    },
-
-    setLogoutAuth() {
-      this.isAuthenticated = false;
-    },
-
-    setSuccessAuth() {
-      this.status = "success"; // может перебить статус user
-      this.isAuthenticated = true;
-    },
-
-    setErrorAuth() {
-      this.status = "error"; // может перебить статус user
+    setStatus(STATUS) {
+      this.status = STATUS;
     },
   },
 });

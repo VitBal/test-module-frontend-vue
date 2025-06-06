@@ -41,15 +41,13 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
-
   if (!userStore.user.id) {
-    await userStore.checkAuth();
+    // await userStore.checkAuth();
+    await userStore.getUser();
   }
-
   if (to.name === "login" && userStore.isAuthenticated) {
     return { name: "home" };
   }
-
   if (!to.meta.guest && !userStore.isAuthenticated) {
     return { name: "login" };
   }
