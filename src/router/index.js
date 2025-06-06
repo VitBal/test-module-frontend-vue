@@ -33,6 +33,11 @@ const router = createRouter({
       component: () => import("@/views/Login.vue"),
     },
     {
+      path: "/locked",
+      name: "locked",
+      component: () => import("@/views/LockedPage.vue"),
+    },
+    {
       path: "/:catchAll(.*)*",
       component: () => import("../views/ErrorNotFound.vue"),
     },
@@ -44,6 +49,10 @@ router.beforeEach(async (to) => {
 
   if (!userStore.isAuthenticated) {
     await userStore.getUser();
+  }
+
+  if ((to.name !== 'locked' && !userStore.moduleAccess) || (to.name === 'locked' && userStore.moduleAccess)) {
+    return { name: to.name === 'locked' ? 'home' : 'locked' };
   }
 
   if (to.name === "login" && userStore.isAuthenticated) {

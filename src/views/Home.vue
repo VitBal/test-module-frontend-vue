@@ -11,13 +11,14 @@
     </div>
 
     <div>
-      <p><b> userStore: </b> {{ userStore.user }}</p>
+      <p><b> userStore: </b> {{ userStore.moduleAccess }}</p>
     </div>
 
     <div class="sm:mx-auto w-[60%] flex flex-wrap gap-1 pt-10">
       <button type="submit" @click="handleAbout" :class="btnStyle">
         AboutPage
       </button>
+      <button type="submit" @click="handleLocked" :class="btnStyle">Locked</button>
       <button type="submit" @click="handleLogin" :class="btnStyle">
         Login
       </button>
@@ -34,6 +35,7 @@
       </button>
       <button type="submit" @click="handle409" :class="btnStyle">409</button>
       <button type="submit" @click="handle419" :class="btnStyle">419</button>
+      <button type="submit" @click="handle423" :class="btnStyle">423</button>
     </div>
   </div>
 </template>
@@ -51,6 +53,10 @@ const btnStyle =
 
 const handleAbout = () => {
   router.push("/about");
+};
+
+const handleLocked = () => {
+  router.push("/locked");
 };
 
 const handleLogout = async () => {
@@ -85,6 +91,10 @@ const handle409 = () => {
 
 const handle419 = () => {
   api.get("/api/test-419");
+};
+
+const handle423 = () => {
+  api.get("/api/test-423");
 };
 </script>
 

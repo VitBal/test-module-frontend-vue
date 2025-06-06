@@ -1,4 +1,5 @@
 import { useUserStore } from "@/stores/user";
+import router from "@/router/index.js";
 
 export const actionsOnError = {
   301: () => console.log("301"), //appStore.setVersionMismatch(),
@@ -8,7 +9,10 @@ export const actionsOnError = {
   409: () => console.log("409"), //appStore.showErrorBar(error.response.data.message, 'warning'),
   419: () => location.reload(),
   // 422: (error) => appStore.showErrorBar(error.response.data.message, 'negative'),
-  // 423: () => userStore.setModuleAccess(false),
+  423: () => {
+    useUserStore().setModuleAccess(false);
+    router.push('/locked');
+  },
   500: () => console.log("500"), //appStore.showErrorBar('Произошла внутренняя ошибка сервера', 'negative'),
   // 503: () => appStore.setMaintenanceMode(true),
 };
