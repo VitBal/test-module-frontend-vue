@@ -41,10 +41,11 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
-  if (!userStore.user.id) {
-    // await userStore.checkAuth();
+
+  if (!userStore.isAuthenticated) {
     await userStore.getUser();
   }
+
   if (to.name === "login" && userStore.isAuthenticated) {
     return { name: "home" };
   }

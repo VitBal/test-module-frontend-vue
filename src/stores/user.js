@@ -4,13 +4,14 @@ import { objectHelper } from "../helpers/object.helper";
 
 export const useUserStore = defineStore("user", {
   state: () => ({
-    isAuthenticated: false, // в геттер перенести
     status: "",
     user: {},
     moduleAccess: true,
   }),
 
   getters: {
+    isAuthenticated: (state) =>
+      state.user && Object.keys(state.user).length > 0,
     userId: (state) => state.user.id,
     profileId: (state) => (state.user.profile ? state.user.profile.id : null),
     isLoaded: (state) => !!state.user.name,
@@ -36,8 +37,6 @@ export const useUserStore = defineStore("user", {
         await AuthService.getCsrf();
         await AuthService.login(user);
 
-        this.setIsAuthenticated(true);
-
         return await this.request();
       } catch (err) {}
     },
@@ -45,9 +44,9 @@ export const useUserStore = defineStore("user", {
     async logout(isServer) {
       try {
         if (isServer) await AuthService.logout();
-        this.setIsAuthenticated(false);
+        this.setUser({});
       } catch (err) {
-        this.setIsAuthenticated(false);
+        this.setUser({});
         throw err;
       }
     },
@@ -55,13 +54,10 @@ export const useUserStore = defineStore("user", {
     async getUser() {
       try {
         let me = await AuthService.me();
-
         this.setUser(me.data.user);
-        this.setIsAuthenticated(true);
-
         return me;
       } catch (err) {
-        this.setIsAuthenticated(false); // !
+        this.setUser({});
       }
     },
 
@@ -72,10 +68,6 @@ export const useUserStore = defineStore("user", {
 
     setUser(user) {
       this.user = user;
-    },
-
-    setIsAuthenticated(bool) {
-      this.isAuthenticated = bool;
     },
   },
 });
