@@ -41,12 +41,11 @@ export const useUserStore = defineStore("user", {
       } catch (err) {}
     },
 
-    async logout(isServer) {
+    async logout() {
       try {
-        if (isServer) await AuthService.logout();
+        await AuthService.logout();
         this.setUser({});
       } catch (err) {
-        this.setUser({});
         throw err;
       }
     },
