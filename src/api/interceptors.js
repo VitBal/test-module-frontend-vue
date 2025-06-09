@@ -11,7 +11,7 @@ export const actionsOnError = {
   403: () => useAppStore().setAccessDenied(),
   404: () => useAppStore().showErrorBar(MSG_OBJ_NOT_FIND),
   409: (error) => useAppStore().showErrorBar(error.response.data.message),
-  419: () => location.reload(),
+  419: () => useUserStore().logout(),
   422: (error) => useAppStore().showErrorBar(error.response.data.message),
   423: () => {
     useUserStore().setModuleAccess(false);
