@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useUserStore } from "@/stores/user";
+import { useAppStore } from "@/stores/app";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -46,6 +47,7 @@ const router = createRouter({
 
 router.beforeEach(async (to) => {
   const userStore = useUserStore();
+  const appStore = useAppStore();
 
   if (!userStore.isAuthenticated) {
     await userStore.getUser();
