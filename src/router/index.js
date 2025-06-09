@@ -49,23 +49,25 @@ router.beforeEach(async (to) => {
   const userStore = useUserStore();
   const appStore = useAppStore();
 
-  if (!userStore.isAuthenticated) {
-    await userStore.getUser();
-  }
+    if (!userStore.isAuthenticated && to.name !=='locked') {
+        await userStore.getUser();
+    }
 
-  if (
-    (to.name !== "locked" && !userStore.moduleAccess) ||
-    (to.name === "locked" && userStore.moduleAccess)
-  ) {
-    return { name: to.name === "locked" ? "home" : "locked" };
-  }
+    if (to.name === 'locked' && (userStore.moduleAccess && !appStore.maintenanceMode)) {
+        return userStore.isAuthenticated ? {name: 'home'} : {name: 'login'};
+    }
 
-  if (to.name === "login" && userStore.isAuthenticated) {
-    return { name: "home" };
-  }
-  if (!to.meta.guest && !userStore.isAuthenticated) {
-    return { name: "login" };
-  }
+    if (to.name !== 'locked' && (!userStore.moduleAccess || appStore.maintenanceMode)) {
+        return {name: 'locked'}
+    }
+
+    if (to.name === "login" && userStore.isAuthenticated) {
+        return {name: "home"}
+    }
+
+    if (!to.meta.guest && !userStore.isAuthenticated) {
+        return {name: "login"}
+    }
 });
 
 export default router;

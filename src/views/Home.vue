@@ -39,6 +39,7 @@
       <button type="submit" @click="handle422" :class="btnStyle">422</button>
       <button type="submit" @click="handle423" :class="btnStyle">423</button>
       <button type="submit" @click="handle500" :class="btnStyle">500</button>
+      <button type="submit" @click="handle503" :class="btnStyle">503</button>
     </div>
   </div>
 </template>
@@ -108,6 +109,10 @@ const handle423 = () => {
 
 const handle500 = () => {
   api.get("/api/test-500");
+};
+
+const handle503 = () => {
+  api.get("/api/test-503");
 };
 </script>
 
