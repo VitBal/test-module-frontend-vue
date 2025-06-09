@@ -60,7 +60,6 @@ export const useUserStore = defineStore("user", {
       }
     },
 
-    // !
     setModuleAccess(access = true) {
       this.moduleAccess = access;
     },

@@ -1,24 +1,17 @@
 import { defineStore } from "pinia";
 
+const ENV_URL = process.env.VITE_API_URL;
+const ENV_HOST = process.env.VITE_SERVER_HOST;
+const ENV_DEBUGGING = process.env.VITE_APP_DEBUGGING;
+
 export const useAppStore = defineStore("app", {
   state: () => ({
     maintenanceMode: false,
     versionMismatch: false,
-    notFound: false,
     accessDenied: false,
-    tooltip: {
-      //TODO:: возможно выпилить
-      show: false,
-      x: 0,
-      y: 0,
-      text: null,
-      timerId: null,
-      enabled: true,
-    },
-    mainPageURL: "https://egird.ru",
-    currentPageURL: process.env.HOST,
+    mainPageURL: ENV_URL,
     redirectingToMainPage: false,
-    redirectToMainPageAfterLogout: !process.env.DEBUGGING,
+    redirectToMainPageAfterLogout: !ENV_DEBUGGING,
     errorBar: {
       show: false,
       message: null,
@@ -52,46 +45,9 @@ export const useAppStore = defineStore("app", {
       this.notFound = state;
     },
 
-    showTooltip(params) {
-      this.tooltipClearTimeout();
-
-      if (params.show) {
-        this.tooltipCalculate(params);
-
-        this.tooltipSetTimeout(
-          setTimeout(() => this.tooltipShow(params.show), params.openDelay)
-        );
-      } else {
-        this.tooltipSetTimeout(
-          setTimeout(() => this.tooltipShow(params.show), params.closeDelay)
-        );
-      }
-    },
-
-    tooltipShow(show) {
-      this.tooltip.show = show;
-    },
-
-    // показать Notify аналог Quasar
+    // показать Notify (был Notify Quasar)
     showErrorBar(message, color = "") {
       console.log(`Notify: message ${message}, color ${color}`);
-    },
-
-    tooltipCalculate(params) {
-      const c = params.event.target.getBoundingClientRect();
-
-      this.tooltip.x = c.left + c.width / 2;
-      this.tooltip.y = c.top;
-
-      this.tooltip.text = params.text;
-    },
-
-    tooltipClearTimeout() {
-      clearTimeout(this.tooltip.timerId);
-    },
-
-    tooltipSetTimeout(timerId) {
-      this.tooltip.timerId = timerId;
     },
   },
 });

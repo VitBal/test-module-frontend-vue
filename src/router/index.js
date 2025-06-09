@@ -51,8 +51,11 @@ router.beforeEach(async (to) => {
     await userStore.getUser();
   }
 
-  if ((to.name !== 'locked' && !userStore.moduleAccess) || (to.name === 'locked' && userStore.moduleAccess)) {
-    return { name: to.name === 'locked' ? 'home' : 'locked' };
+  if (
+    (to.name !== "locked" && !userStore.moduleAccess) ||
+    (to.name === "locked" && userStore.moduleAccess)
+  ) {
+    return { name: to.name === "locked" ? "home" : "locked" };
   }
 
   if (to.name === "login" && userStore.isAuthenticated) {
