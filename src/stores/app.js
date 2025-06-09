@@ -1,8 +1,8 @@
 import { defineStore } from "pinia";
 
-const ENV_URL = process.env.VITE_API_URL;
-const ENV_HOST = process.env.VITE_SERVER_HOST;
-const ENV_DEBUGGING = process.env.VITE_APP_DEBUGGING;
+const ENV_URL = import.meta.env.VITE_API_URL;
+const ENV_HOST = import.meta.env.VITE_SERVER_HOST;
+const ENV_DEBUGGING = import.meta.env.VITE_APP_DEBUGGING;
 
 export const useAppStore = defineStore("app", {
   state: () => ({
