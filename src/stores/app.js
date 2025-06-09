@@ -46,8 +46,10 @@ export const useAppStore = defineStore("app", {
     },
 
     // показать Notify (был Notify Quasar)
-    showErrorBar(message, color = "") {
-      console.log(`Notify: message ${message}, color ${color}`);
+    showErrorBar(message, detail = '') {
+      document.dispatchEvent(new CustomEvent('show-notify', {
+        detail: { message, detail }
+      }));
     },
   },
 });

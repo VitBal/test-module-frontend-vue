@@ -12,6 +12,7 @@
 
     <div>
       <p><b> userStore: </b> {{ userStore.moduleAccess }}</p>
+      <p><b> appStore: </b> {{ appStore }}</p>
     </div>
 
     <div class="sm:mx-auto w-[60%] flex flex-wrap gap-1 pt-10">
@@ -35,17 +36,21 @@
       </button>
       <button type="submit" @click="handle409" :class="btnStyle">409</button>
       <button type="submit" @click="handle419" :class="btnStyle">419</button>
+      <button type="submit" @click="handle422" :class="btnStyle">422</button>
       <button type="submit" @click="handle423" :class="btnStyle">423</button>
+      <button type="submit" @click="handle500" :class="btnStyle">500</button>
     </div>
   </div>
 </template>
 
 <script setup>
-import { useUserStore } from "@/stores/user";
+import {useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { api } from "@/api/index.js";
+import { useAppStore } from "@/stores/app.js";
 
 const userStore = useUserStore();
+const appStore = useAppStore();
 const router = useRouter();
 
 const btnStyle =
@@ -93,8 +98,16 @@ const handle419 = () => {
   api.get("/api/test-419");
 };
 
+const handle422 = () => {
+  api.get("/api/test-422");
+};
+
 const handle423 = () => {
   api.get("/api/test-423");
+};
+
+const handle500 = () => {
+  api.get("/api/test-500");
 };
 </script>
 
