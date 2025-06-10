@@ -1,5 +1,5 @@
 import axios from "axios";
-import {actionsOnError} from "@/api/interceptors.js";
+import { actionsOnError } from "@/api/interceptors.js";
 
 const api = axios.create({
   baseURL: "/",
@@ -11,17 +11,17 @@ const api = axios.create({
   },
 });
 
-// if(process.env.DEBUGGING)
-//   api.defaults.withXSRFToken = true;
-api.interceptors.response.use(
-    (response) => {
-      return Promise.resolve(response);
-    },
-    (error) => {
-      actionsOnError[error.response.status]?.(error);
+if (import.meta.env.VITE_APP_DEBUGGING) api.defaults.withXSRFToken = true;
 
-      return Promise.reject(error);
-    }
+api.interceptors.response.use(
+  (response) => {
+    return Promise.resolve(response);
+  },
+  (error) => {
+    actionsOnError[error.response.status]?.(error);
+
+    return Promise.reject(error);
+  }
 );
 
 function getVersion() {
