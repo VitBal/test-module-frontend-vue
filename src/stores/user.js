@@ -11,7 +11,7 @@ export const useUserStore = defineStore("user", {
 
   getters: {
     isAuthenticated: (state) =>
-      state.user && Object.keys(state.user).length > 0,
+      Object.keys(state.user).length > 0,
     userId: (state) => state.user.id,
     profileId: (state) => (state.user.profile ? state.user.profile.id : null),
     isLoaded: (state) => !!state.user.name,
@@ -41,9 +41,9 @@ export const useUserStore = defineStore("user", {
       } catch (err) {}
     },
 
-    async logout() {
+    async logout(state = true) {
       try {
-        await AuthService.logout();
+        if(state) await AuthService.logout();
         this.setUser({});
       } catch (err) {
         throw err;

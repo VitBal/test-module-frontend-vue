@@ -7,7 +7,7 @@ const MSG_SERVER_ERROR = "Произошла внутренняя ошибка �
 
 export const actionsOnError = {
   301: () => useAppStore().setVersionMismatch(),
-  401: () => useUserStore().logout(),
+  401: () => useUserStore().logout(false),
   403: () => useAppStore().setAccessDenied(),
   404: () => useAppStore().showErrorBar(MSG_OBJ_NOT_FIND),
   409: (error) => useAppStore().showErrorBar(error.response.data.message),
