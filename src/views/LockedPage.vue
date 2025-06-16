@@ -2,7 +2,7 @@
   <div
       class="h-screen w-screen min-w-[600px] flex flex-col justify-center text-center items-center gap-5 bg-linear-to-t from-gray-300 to-white">
     <div class="h-[10rem] w-[10rem]">
-      <img v-if="!userStore.moduleAccess" src="/public/no-access.svg" alt="gear">
+      <img v-if="!userStore.moduleAccess" src="/public/no-access.svg" alt="deny">
       <img v-if="appStore.maintenanceMode" class="gear" src="/public/gear.svg" alt="gear">
     </div>
     <div class="text-[3rem] font-extrabold px-2">
@@ -34,12 +34,12 @@ const message = computed(() => {
   } else if (appStore.maintenanceMode) {
     return {title: 'Приложение в режиме обслуживания', hint: 'Попробуйте зайти позже'}
   } else {
-    return {title: 'Как вы тут оказались?', hint: '☺'}
+    return {title: 'Ошибка', hint: ''}
   }
 })
 
 const btnStyle =
-    "uppercase border-black border-2 rounded-lg py-1 px-2 font-extrabold hover:bg-gray-400";
+    "uppercase border-black border-1 rounded-lg py-1 px-2 hover:bg-gray-400";
 </script>
 
 

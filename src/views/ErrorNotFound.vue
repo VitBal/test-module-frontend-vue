@@ -7,7 +7,7 @@
 
     <button
         type="button"
-        class="uppercase border-black border-2 rounded-lg py-1 px-2 font-extrabold hover:bg-gray-400"
+        class="uppercase border-black border-1 rounded-lg py-1 px-2 hover:bg-gray-400"
         @click="router.push('/')">
       На главную
     </button>
