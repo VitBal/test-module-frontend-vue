@@ -1,9 +1,9 @@
-import { createRouter, createWebHistory } from "vue-router";
+import {createRouter, createWebHashHistory} from "vue-router";
 import { useUserStore } from "@/stores/user";
 import { useAppStore } from "@/stores/app";
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHashHistory(),
   routes: [
     {
       path: "/",
@@ -25,13 +25,13 @@ const router = createRouter({
     {
       path: "/login",
       name: "login",
-      component: () => import("@/views/Login.vue"),
+      component: () => import("@/views/LoginPage.vue"),
       meta: { guest: true },
     },
     {
       path: "/logout",
       name: "logout",
-      component: () => import("@/views/Login.vue"),
+      component: () => import("@/views/LoginPage.vue"),
     },
     {
       path: "/locked",
