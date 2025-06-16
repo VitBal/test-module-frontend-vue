@@ -11,8 +11,7 @@
     </div>
 
     <div>
-      <p><b> userStore: </b> {{ userStore.moduleAccess }}</p>
-      <p><b> appStore: </b> {{ appStore }}</p>
+      <p><b> userStore: </b> {{ userStore.user }}</p>
     </div>
 
     <div class="sm:mx-auto w-[60%] flex flex-wrap gap-1 pt-10">
@@ -48,10 +47,8 @@
 import {useUserStore } from "@/stores/user";
 import { useRouter } from "vue-router";
 import { api } from "@/api/index.js";
-import { useAppStore } from "@/stores/app.js";
 
 const userStore = useUserStore();
-const appStore = useAppStore();
 const router = useRouter();
 
 const btnStyle =
